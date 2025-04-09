@@ -1,0 +1,9 @@
+google-genai
+mcp
+uvicorn
+aiohttp
+google-generativeai 
+httpx 
+python-dotenv 
+anthropic
+colorlog

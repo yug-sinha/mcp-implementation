@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  sql_server:
+    build: .
+    container_name: sql_server
+    command: ["python3", "sql_server.py"]
+    ports:
+      - "8001:8001"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}  # pass in environment variables if needed
+  vector_server:
+    build: .
+    container_name: vector_server
+    command: ["python3", "vector_server.py"]
+    ports:
+      - "8002:8002"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+  client:
+    build: .
+    container_name: mcp_client
+    command: ["python3", "client.py"]
+    depends_on:
+      - sql_server
+      - vector_server
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
