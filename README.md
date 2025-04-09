@@ -50,41 +50,24 @@ The client API forwards requests to Gemini for generating function calls and the
 
 Run all services (SQL Server, Vector Search Server, and Client API) via Docker Compose:
 ```sh
-docker-compose up --build
+docker compose up --build
 ```
 This will start containers for:
 - **SQL Server** on port `8001`
 - **Vector Search Server** on port `8002`
 - **Client API** on port `8080`
 
-### Locally (Without Docker)
-
-1. **Start the servers in separate terminals:**
-
-   - For the SQL Warehouse Server:
-     ```sh
-     python3 sql_server.py
-     ```
-   - For the Vector Search Server:
-     ```sh
-     python3 vector_server.py
-     ```
-
-2. **Start the Client API:**
-   ```sh
-   uvicorn client:app --host 0.0.0.0 --port 8080
-   ```
 
 ## API Usage
 
 The FastAPI client exposes an endpoint to generate tool outputs.
 
 - **POST** `/generate`  
-  **Body Example:**
-  ```json
-  {
-    "instruction": "Convert this text to SQL query: find all records with active status"
-  }
+  **Curl Command Example:**
+  ```sh
+  curl --location 'http://localhost:8080/generate' \
+    --header 'Content-Type: application/json' \
+    --data '{"instruction": "Convert the following instruction into an SQL query: select all customers with outstanding balance"}'
   ```
 
 The API will forward the instruction to Gemini to generate a function call (`txt_to_sql` or `vector_search`) and then call the appropriate server to process the tool.
