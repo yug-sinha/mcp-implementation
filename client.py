@@ -107,6 +107,15 @@ async def connect_and_call_tool(server_script: str, tool_name: str, arguments: d
 # Create FastAPI app instance.
 app = FastAPI(title="MCP Client API", version="1.0")
 
+# Add a startup event with a heartbeat task to log that the application is up.
+@app.on_event("startup")
+async def startup_event():
+    async def heartbeat():
+        while True:
+            logger.info("MCP Client API is running and waiting for requests...")
+            await asyncio.sleep(5)
+    asyncio.create_task(heartbeat())
+
 @app.post("/generate")
 async def generate(request: Request):
     """
